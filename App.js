@@ -1,24 +1,32 @@
 import { StatusBar } from 'expo-status-bar';
 import { KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Icon } from 'react-native-elements';
 import axios from 'axios'
 import Task from './components/Tasks';
+import { useState } from 'react';
 export default function App() {
+  const [tasktext,setTextTAsk] = useState('')
+  const [tasks,setTasks] = useState([]);
+  
+  const HandlePress = ()=>{
+    tasks.push(tasktext)
+    setTextTAsk(null)
+  }
   return (
     <View style={styles.container}>
       <View style={styles.tasksWrapper}>
         <Text style={styles.sectionText}>Today's tasks</Text>
         <View style={styles.items}>
-          <Task text={'task n 1'} />
-          <Task text={'task n 2'} />
+          {tasks.map((t,index)=>(<Task text={t} tasks={tasks} setTasks={setTasks} index={index} />))}
         </View>
       </View>
       <KeyboardAvoidingView
         behavior={Platform.OS === "IOS" ? 'padding' : 'height'}
         style={styles.WriteTask}
         >
-          <TextInput style={styles.input} placeholder='Write a task'/>
+          <TextInput style={styles.input} placeholder='Write a task' onChangeText={setTextTAsk} value={tasktext}/>
 
-          <TouchableOpacity>
+          <TouchableOpacity onPress={HandlePress}>
             <View style={styles.addWrapper}>
               <Text style={styles.addText}>+</Text>
             </View>
@@ -57,21 +65,20 @@ const styles = StyleSheet.create({
   input:{
     paddingVertical:15,
     paddingHorizontal:15,
-    width:250,
-    backgroundColor:'#FFF',
+    width:290,
+    backgroundColor:'#fff',
     borderColor:'#C0C0C0',
     borderWidth:1,
-    width:250,
-
+    borderRadius:20,
   },
   addWrapper:{
     width:60,
     height:60,
-    backgroundColor:'#FFF',
+    backgroundColor:'#fff',
     justifyContent:'center',
     alignItems:'center',
     borderColor:'#C0C0C0',
     borderWidth:1,
-  },
-  addText:{},
+    borderRadius:20,
+  }
 });
